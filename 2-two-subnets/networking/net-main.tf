@@ -34,3 +34,19 @@ resource "aws_subnet" "SN-public-1" {
     availability_zone = "us-east-1a"
     tags = { Name = "SN-public-1"}
 }
+
+# Make private subnet
+
+resource "aws_subnet" "SN-private-1" {
+    vpc_id = aws_vpc.vpc-a.id
+    cidr_block = "192.168.2.0/24"
+    availability_zone = "us-east-1b"
+    tags = { Name = "SN-private-1"}
+}
+
+# Association of public RT with public routing table
+
+resource "aws_route_table_association" "public" {
+    subnet_id = aws_subnet.SN-public-1.id
+    route_table_id = aws_subnet.SN-public-1.id
+}
