@@ -44,9 +44,38 @@ resource "aws_subnet" "SN-private-1" {
     tags = { Name = "SN-private-1"}
 }
 
-# Association of public RT with public routing table
+# Association of public subnet with public routing table
 
 resource "aws_route_table_association" "public" {
     subnet_id = aws_subnet.SN-public-1.id
     route_table_id = aws_subnet.SN-public-1.id
+}
+
+# Configuration of security group
+
+resource "aws_security_group" "permit-web" {
+  name = "permit-web"
+  description = "allow web traffic and SSH"
+  vpc_id = aws_vpc.vpc-a.id
+  ingress {
+    cidr_blocks = [ "0.0.0.0/0" ]
+    description = "Allow SSH"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"   
+  }
+  ingress {
+    cidr_blocks = [ "0.0.0.0/0" ]
+    description = "Allow HTTP"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"   
+  }
+  egress {
+    cidr_blocks = [ "0.0.0.0/0" ]
+    description = "Allow all traffic"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"   
+  }
 }
