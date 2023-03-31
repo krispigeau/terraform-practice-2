@@ -9,6 +9,5 @@ terraform {
 
 provider "aws" {
   # Configuration options
-  region                   = "us-east-1"
-  shared_credentials_files = ["/home/kris/.aws/credentials"]
+  region = "us-east-1"
 }
