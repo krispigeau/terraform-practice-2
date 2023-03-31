@@ -79,3 +79,25 @@ resource "aws_security_group" "permit-web" {
     protocol = "-1"   
   }
 }
+
+# Create EC2 instance in the public subnet
+
+resource "aws_instance" "VM-01" {
+  ami = "ami-047a51fa27710816e"
+  instance_type = "t2.micro"
+  subnet_id = aws_subnet.SN-public-1.id
+  availability_zone = "us-east-1a"
+  security_groups = [aws_security_group.permit-web.id]
+  key_name = "kris_desktop"
+  tags = { Name = "VM-01"}
+  user_data = <<-EOF
+    #!/bin/bash
+    yum update -y
+    yum install httpd -y
+    cd /var/www/html
+    echo "VM $(hostname -f)" \
+    > index.html
+    systemctl restart httpd
+    systemctl enable httpd
+    EOF
+}
