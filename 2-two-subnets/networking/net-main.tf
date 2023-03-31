@@ -48,7 +48,7 @@ resource "aws_subnet" "SN-private-1" {
 
 resource "aws_route_table_association" "public" {
     subnet_id = aws_subnet.SN-public-1.id
-    route_table_id = aws_subnet.SN-public-1.id
+    route_table_id = aws_route_table.RT-public.id
 }
 
 # Configuration of security group
@@ -78,6 +78,7 @@ resource "aws_security_group" "permit-web" {
     to_port = 0
     protocol = "-1"   
   }
+  tags = { Name = "vpc-a-permit-web"}
 }
 
 # Create EC2 instance in the public subnet
