@@ -1,7 +1,7 @@
 # Make VPC
 
 resource "aws_vpc" "vpc-a" {
-    cidr_block = "192.168.0.0/16"
+    cidr_block = var.vpc_cidr_block
     enable_dns_hostnames = true
     enable_dns_support = true
     tags = { Name = "vpc_a"}
@@ -29,9 +29,9 @@ resource "aws_route_table" "RT-public" {
 
 resource "aws_subnet" "SN-public-1" {
     vpc_id = aws_vpc.vpc-a.id
-    cidr_block = "192.168.1.0/24"
+    cidr_block = var.subnet_prefix[0]
     map_public_ip_on_launch = true
-    availability_zone = "us-east-1a"
+    availability_zone = var.azone[0]
     tags = { Name = "SN-public-1"}
 }
 
@@ -39,8 +39,8 @@ resource "aws_subnet" "SN-public-1" {
 
 resource "aws_subnet" "SN-private-1" {
     vpc_id = aws_vpc.vpc-a.id
-    cidr_block = "192.168.2.0/24"
-    availability_zone = "us-east-1b"
+    cidr_block = var.subnet_prefix[1]
+    availability_zone = var.azone[1]
     tags = { Name = "SN-private-1"}
 }
 
@@ -84,10 +84,10 @@ resource "aws_security_group" "permit-web" {
 # Create EC2 instance in the public subnet
 
 resource "aws_instance" "VM-01" {
-  ami = "ami-047a51fa27710816e"
+  ami = var.ami-id
   instance_type = "t2.micro"
   subnet_id = aws_subnet.SN-public-1.id
-  availability_zone = "us-east-1a"
+  availability_zone = var.azone[0]
   security_groups = [aws_security_group.permit-web.id]
   key_name = "kris_desktop"
   tags = { Name = "VM-01"}
