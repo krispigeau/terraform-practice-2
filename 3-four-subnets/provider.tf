@@ -1,3 +1,5 @@
+# Provider definition for AWS
+
 terraform {
   required_providers {
     aws = {
