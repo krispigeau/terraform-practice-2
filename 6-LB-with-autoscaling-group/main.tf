@@ -63,6 +63,7 @@ resource "aws_launch_template" "ec2cluster" {
   user_data = filebase64("${path.module}/example.sh")
 }
 
+/*
 resource "aws_autoscaling_group" "asg" {
   vpc_zone_identifier = data.aws_subnets.default.ids
   target_group_arns    = [aws_lb_target_group.asg-tg.arn]
@@ -131,3 +132,4 @@ resource "aws_lb_listener_rule" "asg-listen" {
     target_group_arn = aws_lb_target_group.asg-tg.arn
   }
 }
+*/
